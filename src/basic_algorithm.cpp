@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstring>
+#include <vector>
 
 using namespace std;
 
@@ -19,17 +20,22 @@ void precompute(char P[]){
 char P[1000];
 char T[1000];
 
-
+bool vocabSeen[130];
 
 int main (){
     int k;
     scanf ("%s",T);
     scanf ("%s",P);
-    scanf ("%s",vocab);
     scanf ("%d",&k);
     
-    //Makni ovo i pogledaj vocab iz inputa
-    vocabSize = strlen(vocab);
+    vector <char> vocab;
+    for (int i=0;T[i]!='\0';++i){
+        if ( vocabSeen[ T[i] ] == 1 ) continue;
+        vocabSeen[ T[i] ] = 1;
+        vocab.push_back(T[i]);
+    }
+    vocabSize = vocab.size();
+
     precompute(P);
     
     //for (int i=0;i<vocabSize;++i){

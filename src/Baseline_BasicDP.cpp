@@ -50,6 +50,8 @@ int solve(int posP, int posT){
 int main(){
     scanf ("%s",T);
     scanf ("%s",P);
+    int k;
+    scanf("%d",&k);
     
     int lenT = strlen(T);
     int lenP = strlen(P);
@@ -64,6 +66,15 @@ int main(){
         solve(lenP,i);
         printf ("%d: %d\n",i,C[lenP][i]);
     }
+    
+    printf ("Output:\n");
+    for (int i=0;i<=lenT;++i){
+        solve(lenP,i);
+        if ( C[lenP][i] <= k ){
+            printf ("%d ",i-1);
+        }
+    }
+    printf ("\n-----\n");
     
     for (int i=0;i<=lenT;++i) printf ("%d ",i);
     printf ("\n");

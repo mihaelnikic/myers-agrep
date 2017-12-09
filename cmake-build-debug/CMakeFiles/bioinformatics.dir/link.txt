@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/bioinformatics.dir/src/main.cpp.o  -o bioinformatics 

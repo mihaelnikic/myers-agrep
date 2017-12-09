@@ -4,12 +4,12 @@
 using namespace std;
 
 
-long long Peq[123] ;// ascii letters
-char vocab[123];
+long long Peq[130] ;// ascii letters
+char vocab[130];
 int vocabSize;
     
+// TO UPPER ili TO LOWER FALI ?
 void precompute(char P[]){
-  
     long long bitPos = 1;
     for (int i=0;P[i]!='\0';++i){
         Peq[ P[i] ] |= bitPos;

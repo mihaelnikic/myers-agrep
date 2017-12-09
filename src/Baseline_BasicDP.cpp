@@ -6,8 +6,8 @@
 
 using namespace std;
 
-char T[1000];
 char P[1000];
+char T[1000];
 
 int n;
 

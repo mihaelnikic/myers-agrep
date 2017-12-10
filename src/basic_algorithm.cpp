@@ -31,7 +31,7 @@ int main (){
     vector <char> vocab;
     for (int i=0;T[i]!='\0';++i){
         if ( vocabSeen[ T[i] ] == 1 ) continue;
-        vocabSeen[ T[i] ] = 1;
+        vocabSeen[ T[i] ] = true;
         vocab.push_back(T[i]);
     }
     vocabSize = vocab.size();

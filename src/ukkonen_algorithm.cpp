@@ -16,7 +16,7 @@
 int main(int argc, char const *argv[]) {
     auto pattern = read_arg_or_prompt(PATTERN_ARG, argc, argv);
     int k = atoi(read_arg_or_prompt(K_ARG, argc, argv));
-    auto T = read_arg_or_prompt(TEXT_ARG, argc, argv);
+    auto T = read_arg_or_prompt(TEXT_ARG, argc, argv); // TODO: napraviti da čita iz fajla
 
     int n = strlen(T);
     int m = strlen(pattern);

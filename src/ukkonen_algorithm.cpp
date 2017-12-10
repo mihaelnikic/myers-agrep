@@ -57,5 +57,7 @@ int main(int argc, char const *argv[]) {
             printf("Match at: %d\n", j - w); //TODO: w isto što i veliko W?
         }
     }
+
+    free(score);
     return 0;
 }

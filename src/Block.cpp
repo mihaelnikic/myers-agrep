@@ -87,3 +87,9 @@ void Block::init_block(int b) {
     set_P(b, ( 1 << sizeof(uint64_t) ) - 1);
     set_M(b, 0);
 }
+
+Block::~Block() {
+    free(_P);
+    free(_M);
+    free(_Peq);
+}

@@ -33,12 +33,16 @@ int Block::advance_block(int b, char t, int h_in) {
     uint64_t Pv = P(b);
     uint64_t Mv = M(b);
     uint64_t Eq = Peq(t, b);
-    int h_out = 0;
+
 
     uint64_t Xv,Xh;
     uint64_t Ph,Mh;
 
-    int w = sizeof(uint64_t);
+    int w = sizeof(uint64_t)*8;
+    printf ("w2:%d\n",w);
+
+    //int h_out = 0;
+    int h_out = w;
 
     Xv = Eq | Mv;
     //add 1
@@ -71,6 +75,8 @@ int Block::advance_block(int b, char t, int h_in) {
 
     set_P(b, Pv);
     set_M(b, Mv);
+
+    printf ("advance blok za char %c :%d\n",t,h_out);
 
     return h_out;
 }

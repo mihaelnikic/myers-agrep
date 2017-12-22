@@ -18,12 +18,29 @@ int main(int argc, char const *argv[]) {
     int k = atoi(read_arg_or_prompt(K_ARG, argc, argv));
     auto T = read_arg_or_prompt(TEXT_ARG, argc, argv); // TODO: napraviti da čita iz fajla
 
-    int n = strlen(T);
-    int m = strlen(pattern);
+    //Ucita i \n !!!
+    int n = strlen(T)-1;
+    int m = strlen(pattern)-1;
 
-    int w = sizeof(long long);
+    //T[n-1] = '\0';
+    //pattern[m-1] = '\0';
+
+    printf ("Pattern:%s\n",pattern);
+    printf ("k:%d\n",k);
+    printf ("Text:%s\n",T);
+
+
+    printf ("%d %d\n",n,m);
+
+    int w = sizeof(long long)*8;
     int y = int_ceil(k, w); // ceil
+    if (y == 0){
+        y = 1;
+    }
     int b_max = int_ceil(m, w); // ceil
+    printf ("w:%d\n",w);
+    printf ("bmax:%d\n",b_max);
+    printf ("y:%d\n",y);
 
     auto score = (int*)malloc(b_max * sizeof(int));
     for (int b = 0; b < y; ++b) {
@@ -36,7 +53,13 @@ int main(int argc, char const *argv[]) {
         block.init_block(b);
     }
 
-    for (int j = 0; j < n + w; ++j) { //TODO: w isto što i veliko W?
+    printf ("Pocinje petlja\n");
+
+    int W = m % w; //Mozda krivo
+    printf ("Izracunat W:%d\n",W);
+
+    for (int j = 0; j < n + W; ++j) { //TODO: w isto što i veliko W? Nije isto
+        printf ("T[j]=%c\n",T[j]);
         int carry = 0;
         for (int b = 0; b < y; ++b) { // TODO: y ukljucen ili ne?
             score[b] += (carry = block.advance_block(b, T[j], carry)); // TODO: znak pridruživanja ili ==?

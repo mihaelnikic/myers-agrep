@@ -38,7 +38,6 @@ int main(int argc, char const *argv[]) {
         y = 1;
     }
     int b_max = int_ceil(m, w); // ceil
-    printf ("w:%d\n",w);
     printf ("bmax:%d\n",b_max);
     printf ("y:%d\n",y);
 
@@ -47,7 +46,7 @@ int main(int argc, char const *argv[]) {
         score[b] = b * w; // TODO: ili samo b ili nesto trece?
     }
 
-    Block block(b_max, y);
+    Block block(b_max, y, pattern);
     // init block
     for (int b = 0; b < y; ++b) {
         block.init_block(b);
@@ -59,26 +58,32 @@ int main(int argc, char const *argv[]) {
     printf ("Izracunat W:%d\n",W);
 
     for (int j = 0; j < n + W; ++j) { //TODO: w isto što i veliko W? Nije isto
-        printf ("T[j]=%c\n",T[j]);
+        printf ("T[%d]=%c\n",j,T[j]);
         int carry = 0;
         for (int b = 0; b < y; ++b) { // TODO: y ukljucen ili ne?
             score[b] += (carry = block.advance_block(b, T[j], carry)); // TODO: znak pridruživanja ili ==?
         }
+        printf ("Score[%d]=%d\n",y-1,score[y-1]);
+        printf ("Carry:%d\n",carry);
+        printf ("y:%d\n",y);
 
         if ((score[y - 1] - carry <= k) && (y < b_max) && ((block.Peq(T[j], y) & 1) || (carry < 0))) {
             y += 1;
             block.init_block(y - 1);
             score[y - 1] = score[y - 2] + w - carry + block.advance_block(y - 1, T[j], carry);
+            printf ("Score2[%d]=%d\n",y-1,score[y-1]);
         }
         else {
             while (score[y - 1] >= (k + w)) {
+                printf ("Oduzimam, %d, %d, %d\n",k+w,y-1,score[y-1]);
                 y -= 1;
             }
         }
 
         if ((y == b_max) && (score[y - 1] <= k)) { // TODO: znak pridruživanja ili ==? | y == b_max ILI (y-1) == bmax
-            printf("Match at: %d\n", j - w); //TODO: w isto što i veliko W?
+            printf("Match at: %d\n", j - W); //TODO: w isto što i veliko W?
         }
+        printf ("Score3[%d]=%d\n",y-1,score[y-1]);
     }
 
     free(score);

@@ -16,7 +16,7 @@ private:
     uint64_t* _M; // 1...bmax
     uint64_t** _Peq; // [ASCII, 1...bmax]
 public:
-    explicit Block(int b_max, int y);
+    explicit Block(int b_max, int y, const char* pattern);
     ~Block();
     uint64_t P(int index);
     uint64_t M(int index);

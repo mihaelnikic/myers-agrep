@@ -6,14 +6,26 @@
 #include <cstdio>
 #include "Block.hpp"
 
-Block::Block(int b_max, int y) {
+Block::Block(int b_max, int y, const char* pattern) {
     _P = (uint64_t *)malloc(b_max * sizeof(uint64_t));
     _M = (uint64_t*)malloc(b_max * sizeof(uint64_t));
-    
+
+    int w = sizeof(uint64_t)*8;
+
     this->_Peq = (uint64_t**)malloc(ASCII * sizeof(uint64_t));
     for (int i = 0; i < ASCII; ++i) {
         this->_Peq[i] = (uint64_t*)calloc((unsigned int)b_max, sizeof(uint64_t));
         // calloc - inicijalizira sve elemente na 0, za razliku od mall
+    }
+
+    for (int block = 0;block<b_max;++block) {
+        //printf ("block:%d\n",block);
+        long long bitPos = 1;
+        for (int j=block*w;j<(block+1)*w;++j){
+            //printf ("j:%d, pattern[%d]=%c\n",j,j,pattern[j]);
+            _Peq[ pattern[j] ][block] |= bitPos;
+            bitPos = bitPos << 1;
+        }
     }
 }
 
@@ -34,15 +46,15 @@ int Block::advance_block(int b, char t, int h_in) {
     uint64_t Mv = M(b);
     uint64_t Eq = Peq(t, b);
 
+    printf ("Eq[blok=%d][char=%c]=%llu\n",b,t,Eq);
 
     uint64_t Xv,Xh;
     uint64_t Ph,Mh;
 
     int w = sizeof(uint64_t)*8;
-    printf ("w2:%d\n",w);
 
-    //int h_out = 0;
-    int h_out = w;
+    int h_out = 0;
+    //int h_out = w;
 
     Xv = Eq | Mv;
     //add 1

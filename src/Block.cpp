@@ -67,10 +67,10 @@ int Block::advance_block(int b, char t, int h_in) {
     Ph = Mv | ( ~ (Xh | Pv) );
     Mh = Pv & Xh;
 
-    if ( Ph & (1 << (w - 1) ) ){
+    if ( Ph & (1ULL << (w - 1) ) ){
         h_out += 1;
     }
-    if ( Mh & (1 << (w - 1) ) ){
+    if ( Mh & (1ULL << (w - 1) ) ){
         h_out -= 1;
     }
 
@@ -103,7 +103,7 @@ void Block::set_M(int index, uint64_t value) {
 }
 
 void Block::init_block(int b) {
-    set_P(b, ( 1 << (sizeof(uint64_t)*8) ) - 1);
+    set_P(b, ( 1ULL << (unsigned long long)(sizeof(uint64_t)*8) ) - 1);
     set_M(b, 0);
 }
 

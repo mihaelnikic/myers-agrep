@@ -47,6 +47,7 @@ int Block::advance_block(int b, char t, int h_in) {
     uint64_t Eq = Peq(t, b);
 
     printf ("Eq[blok=%d][char=%c]=%llu\n",b,t,Eq);
+    printf ("Pv:%llu\nMv:%llu\n",Pv,Mv);
 
     uint64_t Xv,Xh;
     uint64_t Ph,Mh;
@@ -102,7 +103,7 @@ void Block::set_M(int index, uint64_t value) {
 }
 
 void Block::init_block(int b) {
-    set_P(b, ( 1 << sizeof(uint64_t) ) - 1);
+    set_P(b, ( 1 << (sizeof(uint64_t)*8) ) - 1);
     set_M(b, 0);
 }
 

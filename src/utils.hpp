@@ -42,7 +42,11 @@ const char* read_arg_or_prompt(int index, int argc, char const *argv[], FILE *fp
     if (index < argc) { // TODO: random pattern kao što piše u README napraviti ako treba
         return argv[index];
     }
-    printf("Unesi vrijednost za %s\n", LETTER(index));
+    char *input = (char*)malloc(300*sizeof(char));
+    scanf ("%s",input);
+    return input;
+
+    //printf("Unesi vrijednost za %s\n", LETTER(index));
     return read_input(fp);
 }
 

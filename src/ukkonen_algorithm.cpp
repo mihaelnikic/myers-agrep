@@ -19,8 +19,14 @@ int main(int argc, char const *argv[]) {
     auto T = read_arg_or_prompt(TEXT_ARG, argc, argv); // TODO: napraviti da čita iz fajla
 
     //Ucita i \n !!!
-    int n = strlen(T)-1;
-    int m = strlen(pattern)-1;
+//
+//    int n = strlen(T)-1;
+//    int m = strlen(pattern)-1;
+
+    int n = strlen(T);
+    int m = strlen(pattern);
+
+    printf ("%d %d\n",n,m);
 
     //T[n-1] = '\0';
     //pattern[m-1] = '\0';
@@ -43,7 +49,7 @@ int main(int argc, char const *argv[]) {
 
     auto score = (int*)malloc(b_max * sizeof(int));
     for (int b = 0; b < y; ++b) {
-        score[b] = b * w; // TODO: ili samo b ili nesto trece?
+        score[b] = (b+1) * w; // TODO: ili samo b ili nesto trece?
     }
 
     Block block(b_max, y, pattern);
@@ -68,14 +74,15 @@ int main(int argc, char const *argv[]) {
         printf ("y:%d\n",y);
 
         if ((score[y - 1] - carry <= k) && (y < b_max) && ((block.Peq(T[j], y) & 1) || (carry < 0))) {
+            printf ("Increasing y\n");
             y += 1;
             block.init_block(y - 1);
             score[y - 1] = score[y - 2] + w - carry + block.advance_block(y - 1, T[j], carry);
-            printf ("Score2[%d]=%d\n",y-1,score[y-1]);
+            //printf ("Score2[%d]=%d\n",y-1,score[y-1]);
         }
         else {
-            while (score[y - 1] >= (k + w)) {
-                printf ("Oduzimam, %d, %d, %d\n",k+w,y-1,score[y-1]);
+            while (score[y - 1] >= (k + w) && y>1) {
+                printf ("Decreasing y, %d, %d, %d\n",k+w,y-1,score[y-1]);
                 y -= 1;
             }
         }

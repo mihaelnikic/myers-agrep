@@ -142,3 +142,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+.name
+.idea/**/Project.xml

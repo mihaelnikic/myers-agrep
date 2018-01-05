@@ -1,0 +1,11 @@
+//
+// Created by Luka Dulčić on 05/01/2018.
+//
+
+#ifndef BIOINFORMATICS_PATTERN_PARSE_H
+#define BIOINFORMATICS_PATTERN_PARSE_H
+
+#define WORD long
+#define SIGMA 128
+
+#endif //BIOINFORMATICS_PATTERN_PARSE_H

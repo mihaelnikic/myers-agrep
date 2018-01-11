@@ -5,7 +5,7 @@
 #ifndef BIOINFORMATICS_BASIC_ALGORITHM_H
 #define BIOINFORMATICS_BASIC_ALGORITHM_H
 
-void precompute(const char P[]);
-void search(int fd, int k, int m);
+void basic_precompute(const char P[]);
+void basic_search(int fd, int k, int m);
 
 #endif //BIOINFORMATICS_BASIC_ALGORITHM_H

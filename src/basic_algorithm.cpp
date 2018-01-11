@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 #include "basic_algorithm.hpp"
-#include "pattern_parse.hpp"
+#include "globals.hpp"
 
 using namespace std;
 

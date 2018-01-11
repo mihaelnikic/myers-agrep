@@ -3,5 +3,6 @@ project(bioinformatics)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_FILES src/ukkonen_algorithm.cpp src/utils.hpp src/Block.cpp src/Block.hpp)
+#src/basic_algorithm.cpp
+set(SOURCE_FILES src/block_algorithm.cpp src/main.cpp)
 add_executable(bioinformatics ${SOURCE_FILES})

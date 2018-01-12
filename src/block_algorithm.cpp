@@ -102,6 +102,7 @@ inline int advance_block(int b, char c, int h_in) {
 }
 
 void block_search(int fd, int k, int m) {
+    int buff, i;
     int y = div_ceil(k, w) - 1;
 
     auto score = (int *) malloc(b_max * sizeof(int));
@@ -113,8 +114,8 @@ void block_search(int fd, int k, int m) {
     ssize_t bytes_num;
     int carry;
     char c;
-    for (int buff = 1; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
-        for (int i = 0; i < bytes_num; ++i) {
+    for (buff = 1; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
+        for (i = 0; i < bytes_num; ++i) {
             c = buffer[i];
             carry = 0;
             for (int b = 0; b <= y; ++b) {
@@ -133,6 +134,22 @@ void block_search(int fd, int k, int m) {
             }
 
             if (y == (b_max - 1) && score[y] <= k) {
+                printf("Match at: %d\n", buff + i - W);
+            }
+        }
+    }
+
+    if (y == (b_max - 1)) {
+        uint64_t Pv = P[y];
+        uint64_t Mv = M[y];
+        for (i = 0; i < W; ++i) {
+            if (Pv & Mbit) score[y]--;
+            if (Mv & Mbit) score[y]++;
+
+            Pv <<= 1;
+            Mv <<= 1;
+
+            if (score[y] <= k) {
                 printf("Match at: %d\n", buff + i - W);
             }
         }

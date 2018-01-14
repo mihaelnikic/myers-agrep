@@ -1,89 +1,57 @@
 #include <cstdio>
-#include <cstring>
-#include <vector>
+#include <unistd.h>
+
+#include "basic_algorithm.hpp"
+#include "globals.hpp"
 
 using namespace std;
 
-long long Peq[130] ;// ascii letters
-char vocab[130];
-int vocabSize;
-    
-void precompute(char P[]){
-    long long bitPos = 1;
-    for (int i=0;P[i]!='\0';++i){
-        Peq[ P[i] ] |= bitPos;
+uint64_t Peq[SIGMA];
+char buffer[MAX_BUF];
+
+void basic_precompute(const char P[]) {
+    uint64_t bitPos = 1;
+    for (int i = 0; P[i] != '\0'; ++i) {
+        Peq[P[i]] |= bitPos;
         bitPos = bitPos << 1;
     }
-} 
+}
 
-
-char P[1000];
-char T[1000];
-
-bool vocabSeen[130];
-
-int main (){
-    int k;
-    scanf ("%s",T);
-    scanf ("%s",P);
-    scanf ("%d",&k);
-    
-    vector <char> vocab;
-    for (int i=0;T[i]!='\0';++i){
-        if ( vocabSeen[ T[i] ] == 1 ) continue;
-        vocabSeen[ T[i] ] = true;
-        vocab.push_back(T[i]);
-    }
-    vocabSize = vocab.size();
-
-    precompute(P);
-    
-    //for (int i=0;i<vocabSize;++i){
-    //    printf("%lld\n",Peq[ vocab[i] ]);
-    //}
-    
-    int lenT = strlen(T);
-    int lenP = strlen(P);
-    
-    int n = lenT;
-    int m = lenP;
-
+void basic_search(int fd, int k, int m) {
     int score = m;
-    //Mozda unsigned long long koristiti??
-    long long Pv = ( 1 <<  m ) - 1;
-    //printf ("Pv %lld\n",Pv);
-    long long Mv = 0;
+    uint64_t Mbit = ONE << (m - 1);
+    uint64_t Pv = (uint64_t)-1;
+    uint64_t Mv = 0;
 
-    long long Eq;
-    long long Xv,Xh;
-    long long Ph,Mh;
-    for (int j=0;j<n;++j){
-        Eq = Peq[ T[j] ];
-        printf ("%c %d\n",T[j],Eq);
-        Xv = Eq | Mv;
-        Xh = ( ( (Eq & Pv) + Pv ) ^ Pv ) | Eq;
-        
-        Ph = Mv | ( ~ (Xh | Pv) );
-        Mh = Pv & Xh;
-        
-        if ( Ph & (1 << (m-1) ) ){
-            score += 1;
+    uint64_t Eq;
+    uint64_t Xv, Xh;
+    uint64_t Ph, Mh;
+    ssize_t bytes_num;
+    for (int buff = 1; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
+        for (int i = 0; i < bytes_num; ++i) {
+
+            Eq = Peq[buffer[i]];
+            Xv = Eq | Mv;
+            Xh = (((Eq & Pv) + Pv) ^ Pv) | Eq;
+
+            Ph = Mv | (~(Xh | Pv));
+            Mh = Pv & Xh;
+
+            if (Ph & Mbit) {
+                score += 1;
+            }
+            if (Mh & Mbit) {
+                score -= 1;
+            }
+
+            Ph <<= 1;
+            Mh <<= 1;
+            Pv = Mh | (~(Xv | Ph));
+            Mv = Ph & Xv;
+
+            if (score <= k) {
+                printf("Match at: %d\n", buff + i);
+            }
         }
-        if ( Mh & (1 << (m-1) ) ){
-            score -= 1;
-        }
-        
-        Ph <<= 1;
-        Mh <<= 1;
-        Pv = Mh | ( ~ ( Xv | Ph ) );
-        Mv = Ph & Xv;
-        
-        printf ("Score: %d\n",score);
-        if (score <= k){
-            printf ("Match at: %d\n", j );
-        }
-        
     }
-    
-    return 0;
 }

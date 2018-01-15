@@ -6,13 +6,12 @@
 
 using namespace std;
 
-uint64_t Peq[SIGMA];
-char buffer[MAX_BUF];
+uint64_t Peqb[SIGMA];
 
-void basic_precompute(const char P[]) {
+void basic_precompute(const char *pattern, int m) {
     uint64_t bitPos = 1;
-    for (int i = 0; P[i] != '\0'; ++i) {
-        Peq[P[i]] |= bitPos;
+    for (int i = 0; pattern[i] != '\0'; ++i) {
+        Peqb[pattern[i]] |= bitPos;
         bitPos = bitPos << 1;
     }
 }
@@ -29,8 +28,7 @@ void basic_search(int fd, int k, int m) {
     ssize_t bytes_num;
     for (int buff = 1; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
         for (int i = 0; i < bytes_num; ++i) {
-
-            Eq = Peq[buffer[i]];
+            Eq = Peqb[buffer[i]];
             Xv = Eq | Mv;
             Xh = (((Eq & Pv) + Pv) ^ Pv) | Eq;
 

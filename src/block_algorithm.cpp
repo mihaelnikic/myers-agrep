@@ -99,7 +99,7 @@ inline int advance_block(int b, char c, int h_in) {
     return h_out;
 }
 
-void block_search(int fd, int k, int m) {
+int block_search(int fd, int k, int m) {
     int buff, i;
     int y = div_ceil(k, w) - 1;
 
@@ -112,7 +112,7 @@ void block_search(int fd, int k, int m) {
     ssize_t bytes_num;
     int carry;
     char c;
-    for (buff = 1; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
+    for (buff = 0; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
         for (i = 0; i < bytes_num; ++i) {
             c = buffer[i];
             carry = 0;
@@ -132,7 +132,11 @@ void block_search(int fd, int k, int m) {
             }
 
             if (y == (b_max - 1) && score[y] <= k) {
-                printf("Match at: %d\n", buff + i - W);
+                if (score[y] < k) {
+                    k = score[y];
+                    matches.clear();
+                }
+                matches.push_back(buff + i - W);
             }
         }
     }
@@ -148,7 +152,11 @@ void block_search(int fd, int k, int m) {
             Mv <<= 1;
 
             if (score[y] <= k) {
-                printf("Match at: %d\n", buff + i - W);
+                if (score[y] < k) {
+                    k = score[y];
+                    matches.clear();
+                }
+                matches.push_back(buff + i - W);
             }
         }
     }
@@ -157,4 +165,6 @@ void block_search(int fd, int k, int m) {
     free(P);
     free(M);
     free(Peq);
+
+    return k;
 }

@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <cstring>
+#include <vector>
 
 #ifndef BIOINFORMATICS_PATTERN_PARSE_H
 #define BIOINFORMATICS_PATTERN_PARSE_H
@@ -13,5 +14,5 @@
 static uint64_t ONE = 1;
 static int w = sizeof(uint64_t) * 8;
 extern char buffer[MAX_BUF];
-
+extern std::vector<int> matches;
 #endif //BIOINFORMATICS_PATTERN_PARSE_H

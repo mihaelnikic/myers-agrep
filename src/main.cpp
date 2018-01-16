@@ -2,6 +2,7 @@
 #include <cctype>
 #include <fcntl.h>
 #include <cstdlib>
+#include <unistd.h>
 
 #include "agrep.hpp"
 #include "globals.hpp"
@@ -15,9 +16,17 @@ bool is_integer(const char *num) {
     return true;
 }
 
+void print_matches(int edit_distance, FILE *fd) {
+    fprintf(fd, "k=%d\n", edit_distance);
+    std::vector<int >::iterator it;
+    for (it = matches.begin(); it != matches.end(); ++it) {
+        fprintf(fd, "%d\n", *it);
+    }
+}
+
 int main(int argc, char const *argv[]) {
-    if (argc < 3 || argc > 4) {
-        printf("Invalid arguments. Usage: agrep [pattern] [k] [input_file]\n");
+    if (argc < 3 || argc > 5) {
+        printf("Invalid arguments. Usage: agrep [pattern] [k] [input_file] [output_file]\n");
         return 1;
     }
 
@@ -31,19 +40,30 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
     int k = atoi(argv[2]);
-    if (k > m) {
+    if (k >= m) {
         printf("k > pattern length\n");
         return 1;
     }
 
-    // if there is no file name in args default input to stdin (assume input is piped)
-    int fd = open(argv[3], O_RDONLY);
-    if (fd < 0) {
+    // read file name from args
+    int fin = open(argv[3], O_RDONLY);
+    if (fin < 0) {
         perror("Cannot open file!");
         return 1;
     }
-    
-    search(pattern, m, k, fd);
+
+    FILE *fout = argc == 5 ? fopen(argv[4], "w") : stdout;
+
+    //search for matches
+    int edit_distance = search(pattern, m, k, fin);
+
+    print_matches(edit_distance, fout);
+
+    close(fin);
+    //if out file is not stdout
+    if (argc == 5) {
+        fclose(fout);
+    }
 
     return 0;
 }

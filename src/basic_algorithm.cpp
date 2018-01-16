@@ -16,7 +16,7 @@ void basic_precompute(const char *pattern, int m) {
     }
 }
 
-void basic_search(int fd, int k, int m) {
+int basic_search(int fd, int k, int m) {
     int score = m;
     uint64_t Mbit = ONE << (m - 1);
     uint64_t Pv = (uint64_t)-1;
@@ -26,7 +26,7 @@ void basic_search(int fd, int k, int m) {
     uint64_t Xv, Xh;
     uint64_t Ph, Mh;
     ssize_t bytes_num;
-    for (int buff = 1; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
+    for (int buff = 0; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
         for (int i = 0; i < bytes_num; ++i) {
             Eq = Peqb[buffer[i]];
             Xv = Eq | Mv;
@@ -48,8 +48,14 @@ void basic_search(int fd, int k, int m) {
             Mv = Ph & Xv;
 
             if (score <= k) {
-                printf("Match at: %d\n", buff + i);
+                if (score < k) {
+                    k = score;
+                    matches.clear();
+                }
+                matches.push_back(buff + i);
             }
         }
     }
+
+    return k;
 }

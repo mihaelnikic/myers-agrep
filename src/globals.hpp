@@ -2,6 +2,9 @@
 // Created by Luka Dulčić on 05/01/2018.
 //
 
+#include <stdint.h>
+#include <cstring>
+
 #ifndef BIOINFORMATICS_PATTERN_PARSE_H
 #define BIOINFORMATICS_PATTERN_PARSE_H
 

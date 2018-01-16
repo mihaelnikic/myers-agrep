@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fcntl.h>
-#include <zconf.h>
 
 #include "basic_algorithm.hpp"
 #include "block_algorithm.hpp"
@@ -39,7 +38,7 @@ int main(int argc, char const *argv[]) {
     }
 
     // if there is no file name in args default input to stdin (assume input is piped)
-    int fd = argc == 4 ? open(argv[3], O_RDONLY) : STDIN_FILENO;
+    int fd = open(argv[3], O_RDONLY);
     if (fd < 0) {
         perror("Cannot open file!");
         return 1;

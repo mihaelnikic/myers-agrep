@@ -17,6 +17,7 @@ uint64_t **Peq;
 uint64_t Mbit;
 
 inline int div_ceil(int x, int y) {
+    if (x == 0) return 1;
     return x / y + (x % y == 0 ? 0 : 1);
 }
 

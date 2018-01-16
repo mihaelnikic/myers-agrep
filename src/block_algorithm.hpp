@@ -5,7 +5,7 @@
 #ifndef BIOINFORMATICS_BLOCK_ALGORITHM_H
 #define BIOINFORMATICS_BLOCK_ALGORITHM_H
 
-int block_precompute(const char P[]);
+void block_precompute(const char *pattern, int m);
 void block_search(int fd, int k, int m);
 
 #endif //BIOINFORMATICS_BLOCK_ALGORITHM_H

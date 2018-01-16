@@ -9,8 +9,6 @@
 #include "block_algorithm.hpp"
 #include "globals.hpp"
 
-char buffer[MAX_BUF];
-int w;
 int W;
 int b_max;
 uint64_t *P;
@@ -22,33 +20,32 @@ inline int div_ceil(int x, int y) {
     return x / y + (x % y == 0 ? 0 : 1);
 }
 
-int block_precompute(const char pattern[]) {
-    int pattern_length = (int) strlen(pattern);
-    w = sizeof(uint64_t) * 8;
-    b_max = div_ceil(pattern_length, w);
-    W = w * b_max - pattern_length;
+void block_precompute(const char *pattern, int m) {
+    //int pattern_length = (int) strlen(pattern);
+    int w_bytes = sizeof(uint64_t);
+    w = w_bytes * 8;
+    b_max = div_ceil(m, w);
+    W = w * b_max - m;
     Mbit = ONE << (w - 1);
 
-    P = (uint64_t *) malloc(b_max * w);
-    M = (uint64_t *) malloc(b_max * w);
+    P = (uint64_t *) malloc(b_max * w_bytes);
+    M = (uint64_t *) malloc(b_max * w_bytes);
 
     Peq = (uint64_t **) malloc((SIGMA + 1) * sizeof(uint64_t *));
 
     uint64_t bitPos;
     for (int c = 0; c < SIGMA; ++c) {
-        Peq[c] = (uint64_t *) calloc(b_max, w);
+        Peq[c] = (uint64_t *) calloc(b_max, w_bytes);
         for (int block = 0; block < b_max; ++block) {
             bitPos = (uint64_t) 1;
             for (int i = block * w; i < (block + 1) * w; ++i) {
-                if (i >= pattern_length || pattern[i] == c) {
+                if (i >= m || pattern[i] == c) {
                     Peq[c][block] |= bitPos;
                 }
                 bitPos <<= 1;
             }
         }
     }
-
-    return pattern_length;
 }
 
 inline void init_block(int b) {

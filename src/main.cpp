@@ -1,11 +1,10 @@
-#include <iostream>
+#include <cstdio>
+#include <cctype>
 #include <fcntl.h>
+#include <cstdlib>
 
-#include "basic_algorithm.hpp"
-#include "block_algorithm.hpp"
+#include "agrep.hpp"
 #include "globals.hpp"
-
-char buffer[MAX_BUF];
 
 bool is_integer(const char *num) {
     for (int i = 0; num[i] != '\0' ; ++i) {
@@ -43,14 +42,8 @@ int main(int argc, char const *argv[]) {
         perror("Cannot open file!");
         return 1;
     }
-
-    if (m <= w) {
-        basic_precompute(pattern, m);
-        basic_search(fd, k, m);
-    } else {
-        block_precompute(pattern, m);
-        block_search(fd, k, m);
-    }
+    
+    search(pattern, m, k, fd);
 
     return 0;
 }

@@ -31,7 +31,7 @@ void block_precompute(const char *pattern, int m) {
     P = (uint64_t *) malloc(b_max * w_bytes);
     M = (uint64_t *) malloc(b_max * w_bytes);
 
-    Peq = (uint64_t **) malloc((SIGMA + 1) * sizeof(uint64_t *));
+    Peq = (uint64_t **) malloc(SIGMA * sizeof(uint64_t *));
 
     uint64_t bitPos;
     for (int c = 0; c < SIGMA; ++c) {

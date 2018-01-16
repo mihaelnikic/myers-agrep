@@ -4,5 +4,5 @@ project(bioinformatics)
 set(CMAKE_CXX_STANDARD 14)
 
 #src/basic_algorithm.cpp
-set(SOURCE_FILES src/basic_algorithm.cpp src/block_algorithm.cpp src/main.cpp)
+set(SOURCE_FILES src/basic_algorithm.cpp src/block_algorithm.cpp src/main.cpp src/agrep.cpp src/agrep.hpp)
 add_executable(bioinformatics ${SOURCE_FILES})

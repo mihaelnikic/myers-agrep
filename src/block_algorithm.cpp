@@ -1,5 +1,5 @@
 //
-// Created by mihael on 10.12.17..
+// Created by Luka Dulčić, Mihael Nikić.
 //
 
 #include <cstdio>

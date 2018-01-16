@@ -1,5 +1,5 @@
 //
-// Created by Luka Dulčić on 05/01/2018.
+// Created by Martin Gluhak.
 //
 
 #ifndef BIOINFORMATICS_BASIC_ALGORITHM_H

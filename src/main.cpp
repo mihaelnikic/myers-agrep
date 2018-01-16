@@ -1,3 +1,7 @@
+//
+// Created by Luka Dulčić, Mihael Nikić, Martin Gluhak.
+//
+
 #include <cstdio>
 #include <cctype>
 #include <fcntl.h>

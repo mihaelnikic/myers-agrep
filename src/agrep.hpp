@@ -1,5 +1,5 @@
 //
-// Created by Luka Dulčić on 16/01/2018.
+// Created by Luka Dulčić.
 //
 
 #ifndef BIOINFORMATICS_AGREP_H

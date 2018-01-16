@@ -1,5 +1,5 @@
 //
-// Created by Luka Dulčić on 05/01/2018.
+// Created by Luka Dulčić, Mihael Nikić.
 //
 
 #ifndef BIOINFORMATICS_BLOCK_ALGORITHM_H

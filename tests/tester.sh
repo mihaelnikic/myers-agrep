@@ -27,11 +27,6 @@ if [ "$#" -ne 3 ]; then
 fi
 pattern="$1";k="$2";file_or_folder="$3"
 if [[ -d "$file_or_folder" ]]; then
-    #for f in "$file_or_folder"/*.parsed; do
-    #    echo "folder $f" $'\n'
-    #    result=$(get_size_and_time "$pattern" "$k" "$f")
-    #    echo "$f;$result\n"
-    #done
     find "$file_or_folder" -name "*.parsed" -print0 | while read -d $'\0' file
     do
         result=$(get_size_and_time "$pattern" "$k" "$file")

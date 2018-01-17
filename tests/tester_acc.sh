@@ -5,6 +5,7 @@
 function get_values_from_file() {
     pattern="$1";k="$2";file="$3";
     parent_path="$4"
+    error_file="$5"
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
             # linux
             time_op="/usr/bin/time"
@@ -21,6 +22,18 @@ function get_values_from_file() {
         echo "$file":Same
     else
         echo "$file":Differ
+        if [[ "$error_file" != "" ]]; then
+            echo "====================" >> "$error_file"
+            echo "File name: $file" >> "$error_file"
+            echo "agrep output:" >> "$error_file"
+            echo "$agrep_out" >> "$error_file"
+            echo "--------------------" >> "$error_file"
+            echo "edlib output:" >> "$error_file"
+            echo "$edlib_out" >> "$error_file"
+            echo "--------------------" >> "$error_file"
+            echo "difference:" >> "$error_file"
+            diff --suppress-common-lines <(echo -e "$agrep_out") <(echo -e "$edlib_out") >> "$error_file"
+        fi
      #   echo 'agrep_out:'
      #   echo "$agrep_out"
      #   echo 'edlib_out'
@@ -32,14 +45,15 @@ function get_values_from_file() {
 function get_values() {
     pattern="$1";k="$2";file_or_folder="$3";
     parent_path="$4"
+    error_file="$5"
     if [[ -d "$file_or_folder" ]]; then
         find "$file_or_folder" \( -name "*.parsed" -or -name "*.chars" \) -print0 | while read -d $'\0' file
         do
-            result=$(get_values_from_file  "$pattern" "$k" "$file" "$parent_path")
+            result=$(get_values_from_file  "$pattern" "$k" "$file" "$parent_path" "$error_file")
             echo "$result"
         done
     else
-        result=$(get_values_from_file "$pattern" "$k" "$file_or_folder" "$parent_path")
+        result=$(get_values_from_file "$pattern" "$k" "$file_or_folder" "$parent_path" "$error_file")
         echo "$result"
     fi
 }
@@ -48,11 +62,11 @@ current_path="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )"
 parent_path="$(dirname "$current_path")"
 
 
-if [ "$#" -ne 3 ]; then
-    (>&2 echo "Expected three arguments: [pattern] [k] [samples folder/sample file]!")
+if [ "$#" -lt 3 ]; then
+    (>&2 echo "Expected three arguments: [pattern] [k] [samples folder/sample file] [OPTIONAL error_file]!")
     exit 1
 fi
-result=$(get_values "$1" "$2" "$3" "$parent_path")
+result=$(get_values "$1" "$2" "$3" "$parent_path" "$4")
 echo "$result"
 valid="$(("$(echo "$result" | egrep "Same"| wc -l)"))"
 total="$(("$(echo "$result" | wc -l)"))"

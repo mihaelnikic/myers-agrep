@@ -32,6 +32,7 @@ int basic_search(int fd, int k, int m) {
     ssize_t bytes_num;
     for (int buff = 0; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
         for (int i = 0; i < bytes_num; ++i) {
+            if (buffer[i] == '\n') continue;
             Eq = Peqb[buffer[i]];
             Xv = Eq | Mv;
             Xh = (((Eq & Pv) + Pv) ^ Pv) | Eq;

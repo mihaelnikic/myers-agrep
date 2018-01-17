@@ -114,10 +114,6 @@ int block_search(int fd, int k, int m) {
     char c;
     for (buff = 0; (bytes_num = read(fd, buffer, MAX_BUF)) > 0; buff += bytes_num) {
         for (i = 0; i < bytes_num; ++i) {
-            if (buffer[i] == '\n'){
-                buff -= 1;
-                continue;
-            }
             c = buffer[i];
             carry = 0;
             for (int b = 0; b <= y; ++b) {

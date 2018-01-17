@@ -1,5 +1,5 @@
 # A Fast Bit-Vector Algorithm for Approximate String Matching Based on Dynamic Programming
-This repository is implementation of Gene Myers [algorithm](https://dl.acm.org/citation.cfm?id=316550) for approximate string matching which runs in `O(nm/w)` time.
+This repository is implementation of Gene Myers [algorithm](https://dl.acm.org/citation.cfm?id=316550) for approximate string matching which runs in `O(kn/w)` time.
 
 ## Building
 After cloning this repository just execute `make` in command line which will generate `agrep` executable.

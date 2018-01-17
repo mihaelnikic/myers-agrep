@@ -13,6 +13,9 @@
 
 bool is_integer(const char *num) {
     for (int i = 0; num[i] != '\0' ; ++i) {
+        if (i == 0 && (num[i] == '-' || num[i] == '+')) {
+            continue;
+        }
         if (!isdigit(num[i])) {
             return false;
         }
@@ -21,7 +24,7 @@ bool is_integer(const char *num) {
 }
 
 void print_matches(int edit_distance, FILE *fd) {
-    fprintf(fd, "k=%d\n", edit_distance);
+    fprintf(fd, "k=%d\n", matches.empty() ? -1 : edit_distance);
     std::vector<int >::iterator it;
     for (it = matches.begin(); it != matches.end(); ++it) {
         fprintf(fd, "%d\n", *it);
@@ -36,7 +39,7 @@ int main(int argc, char const *argv[]) {
 
     // read pattern from args
     const char *pattern = argv[1];
-    size_t m = strlen(pattern);
+    int m = strlen(pattern);
 
     // read k from args or default it to 0 if it's not provided
     if (!is_integer(argv[2])) {
@@ -44,7 +47,8 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
     int k = atoi(argv[2]);
-    if (k >= m) {
+    k = k == -1 ? m : k; //if k=-1 start with k=m
+    if (k > m) {
         printf("k > pattern length\n");
         return 1;
     }

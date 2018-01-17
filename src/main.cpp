@@ -11,8 +11,13 @@
 #include "agrep.hpp"
 #include "globals.hpp"
 
+/**
+ * Returns true if num is integer.
+ *
+ * @param num pointer to string.
+ */
 bool is_integer(const char *num) {
-    for (int i = 0; num[i] != '\0' ; ++i) {
+    for (int i = 0; num[i] != '\0'; ++i) {
         if (i == 0 && (num[i] == '-' || num[i] == '+')) {
             continue;
         }
@@ -23,16 +28,28 @@ bool is_integer(const char *num) {
     return true;
 }
 
+/**
+ * Prints minimal edit distance and all positions (0-based) at which those matches exist in input text.
+ *
+ * @param edit_distance minimal edit distance found by search
+ * @param fd output file descriptor.
+ */
 void print_matches(int edit_distance, FILE *fd) {
-    fprintf(fd, "k=%d\n", matches.empty() ? -1 : edit_distance);
-    std::vector<int >::iterator it;
+    fprintf(fd, "k=%d\n", edit_distance);
+    std::vector<int>::iterator it;
     for (it = matches.begin(); it != matches.end(); ++it) {
         fprintf(fd, "%d\n", *it);
     }
 }
 
+/**
+ * Main function of program, parses and validates arguments, calls agrep search function and print output of search.
+ *
+ * @return 0 on success
+ */
 int main(int argc, char const *argv[]) {
-    if (argc < 3 || argc > 5) {
+    // first 3 arguments are mandatory, [output_file] is optional
+    if (argc < 4 || argc > 5) {
         printf("Invalid arguments. Usage: agrep [pattern] [k] [input_file] [output_file]\n");
         return 1;
     }
@@ -41,7 +58,7 @@ int main(int argc, char const *argv[]) {
     const char *pattern = argv[1];
     int m = strlen(pattern);
 
-    // read k from args or default it to 0 if it's not provided
+    // read k from args
     if (!is_integer(argv[2])) {
         printf("Invalid value for k, %s\n", argv[2]);
         return 1;
@@ -60,6 +77,7 @@ int main(int argc, char const *argv[]) {
         return 1;
     }
 
+    // opens output_file if user provided it, otherwise default output to stdout
     FILE *fout = argc == 5 ? fopen(argv[4], "w") : stdout;
 
     //search for matches
@@ -68,7 +86,7 @@ int main(int argc, char const *argv[]) {
     print_matches(edit_distance, fout);
 
     close(fin);
-    //if out file is not stdout
+    // if out file is not stdout
     if (argc == 5) {
         fclose(fout);
     }

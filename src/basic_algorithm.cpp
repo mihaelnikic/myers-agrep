@@ -2,6 +2,10 @@
 // Created by Martin Gluhak.
 //
 
+/**
+ * Basic version of Myers agrep which works when pattern length is <= size of machine word.
+ */
+
 #include <cstdio>
 #include <unistd.h>
 
@@ -23,7 +27,7 @@ void basic_precompute(const char *pattern, int m) {
 int basic_search(int fd, int k, int m) {
     int score = m;
     uint64_t Mbit = ONE << (m - 1);
-    uint64_t Pv = (uint64_t)-1;
+    uint64_t Pv = (uint64_t) -1;
     uint64_t Mv = 0;
 
     uint64_t Eq;

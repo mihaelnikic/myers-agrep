@@ -2,6 +2,11 @@
 // Created by Luka Dulčić.
 //
 
+/**
+ * Since edlibAligner didn't suite us much to compare our agrep and edlib we created this file which is a simple wrapper
+ * of edlibAlign function so we can invoke edlibAlign from command line in same fashion as agrep.
+ */
+
 #include <cstdio>
 #include <cstring>
 #include <edlib.h>
@@ -26,7 +31,7 @@ int main(int argc, char const *argv[]) {
 
     FILE *out = argc == 5 ? fopen(argv[4], "w") : stdout;
 
-    EdlibAlignResult result = edlibAlign(argv[1], strlen(argv[1]), data.data(), data.size(), edlibNewAlignConfig(k, EDLIB_MODE_HW, EDLIB_TASK_LOC, NULL, 0));
+    EdlibAlignResult result = edlibAlign(argv[1], strlen(argv[1]), data.data(), data.size(), edlibNewAlignConfig(k, EDLIB_MODE_HW, EDLIB_TASK_DISTANCE, NULL, 0));
     if (result.status == EDLIB_STATUS_ERROR) {
         printf("ERROR");
         return 1;

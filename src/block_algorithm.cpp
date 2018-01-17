@@ -2,6 +2,10 @@
 // Created by Luka Dulčić, Mihael Nikić.
 //
 
+/**
+ * Block version of Myers algorithm which works for arbitrary pattern lengths.
+ */
+
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
@@ -22,7 +26,6 @@ inline int div_ceil(int x, int y) {
 }
 
 void block_precompute(const char *pattern, int m) {
-    //int pattern_length = (int) strlen(pattern);
     int w_bytes = sizeof(uint64_t);
     w = w_bytes * 8;
     b_max = div_ceil(m, w);
@@ -40,6 +43,7 @@ void block_precompute(const char *pattern, int m) {
         for (int block = 0; block < b_max; ++block) {
             bitPos = (uint64_t) 1;
             for (int i = block * w; i < (block + 1) * w; ++i) {
+                // if we are in last block where pad all positions > m with ones (all matching wildcard)
                 if (i >= m || pattern[i] == c) {
                     Peq[c][block] |= bitPos;
                 }
@@ -50,7 +54,7 @@ void block_precompute(const char *pattern, int m) {
 }
 
 inline void init_block(int b) {
-    P[b] = (uint64_t)-1;//Ones
+    P[b] = (uint64_t) -1;//Ones
     M[b] = 0;
 }
 
@@ -59,25 +63,24 @@ inline int advance_block(int b, char c, int h_in) {
     uint64_t Mv = M[b];
     uint64_t Eq = Peq[c][b];
 
-    uint64_t Xv,Xh;
-    uint64_t Ph,Mh;
+    uint64_t Xv, Xh;
+    uint64_t Ph, Mh;
 
     int h_out = 0;
 
     Xv = Eq | Mv;
-    //add 1
-    if(h_in < 0) {
+    if (h_in < 0) {
         Eq |= ONE;
     }
-    Xh = ( ( (Eq & Pv) + Pv ) ^ Pv ) | Eq;
+    Xh = (((Eq & Pv) + Pv) ^ Pv) | Eq;
 
-    Ph = Mv | ( ~ (Xh | Pv) );
+    Ph = Mv | (~(Xh | Pv));
     Mh = Pv & Xh;
 
-    if ( Ph & Mbit ){
+    if (Ph & Mbit) {
         h_out += 1;
     }
-    if ( Mh & Mbit ){
+    if (Mh & Mbit) {
         h_out -= 1;
     }
 
@@ -86,11 +89,10 @@ inline int advance_block(int b, char c, int h_in) {
     //add 2.
     if (h_in < 0) {
         Mh |= ONE;
-    }
-    else if(h_in > 0) {
+    } else if (h_in > 0) {
         Ph |= ONE;
     }
-    Pv = Mh | ( ~ ( Xv | Ph ) );
+    Pv = Mh | (~(Xv | Ph));
     Mv = Ph & Xv;
 
     P[b] = Pv;
@@ -142,14 +144,17 @@ int block_search(int fd, int k, int m) {
     }
 
     if (y == (b_max - 1)) {
-        uint64_t Pv = P[y];
-        uint64_t Mv = M[y];
+        // simplified version of advance_block when Eq vector is ones (Ph = Mv and Mh = Pv)
+        // here we assume input sequence is padded with W all matching wildcard (which is same thing as assuming
+        // Eq vector is all ones)
+        uint64_t Ph = M[y];
+        uint64_t Mh = P[y];
         for (i = 0; i < W; ++i) {
-            if (Pv & Mbit) score[y]--;
-            if (Mv & Mbit) score[y]++;
+            if (Ph & Mbit) score[y]++;
+            if (Mh & Mbit) score[y]--;
 
-            Pv <<= 1;
-            Mv <<= 1;
+            Ph <<= 1;
+            Mh <<= 1;
 
             if (score[y] <= k) {
                 if (score[y] < k) {

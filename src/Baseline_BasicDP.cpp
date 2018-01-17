@@ -2,6 +2,10 @@
 // Created by Martin Gluhak.
 //
 
+/**
+ * Basic dynamic programming algorithm for finding edit distance with complexity of O(n * m).
+ */
+
 #include <cstdio>
 #include <cstring>
 #include <algorithm>

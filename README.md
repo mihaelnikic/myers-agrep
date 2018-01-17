@@ -31,7 +31,7 @@ data/example.txt
 ACTGA
 ```
 
-`agrep TC -1 data/example.txt` <br>
+`agrep TC -1 test_data/example.txt` <br>
 
 Output: <br>
 ```
